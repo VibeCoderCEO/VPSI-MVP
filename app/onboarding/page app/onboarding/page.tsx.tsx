@@ -1,15 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Store, ShieldCheck, Camera, ArrowRight, CheckCircle } from 'lucide-react';
+import { MapPin, Store, Camera, ArrowRight, CheckCircle } from 'lucide-react';
 
 export default function OnboardingPage() {
-  const [role, setRole] = useState<'consumer' | 'professional'>('consumer');
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // Form Data
+  // Form Data State
   const [formData, setFormData] = useState({
     fullName: '',
     businessName: '',
@@ -31,7 +30,7 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans p-6">
-      {/* Progress Bar */}
+      {/* 1. Progress Bar Section */}
       <div className="max-w-md mx-auto mb-10">
         <div className="flex justify-between mb-2">
           <span className="text-[10px] font-bold uppercase tracking-widest text-purion-primary">Account Setup</span>
@@ -46,18 +45,18 @@ export default function OnboardingPage() {
         </div>
       </div>
 
+      {/* 2. Main Content Section */}
       <div className="max-w-md mx-auto">
         {step === 1 ? (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 className="text-3xl font-black text-purion-dark mb-2">Complete Your Profile</h1>
-            <p className="text-slate-500 mb-8">Tell us who you are to personalize your Purion experience.</p>
+          <motion.div key="step1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+            <h1 className="text-3xl font-black text-purion-dark mb-2 tracking-tight">Complete Your Profile</h1>
+            <p className="text-slate-500 mb-8 text-sm">Tell us who you are to personalize your Purion experience.</p>
             
             <div className="space-y-6">
-              {/* Profile Photo Upload placeholder */}
               <div className="flex justify-center mb-8">
                 <div className="w-24 h-24 bg-slate-50 border-2 border-dashed border-slate-200 rounded-full flex flex-col items-center justify-center text-slate-400 hover:border-purion-primary hover:text-purion-primary cursor-pointer transition-all">
                   <Camera size={24} />
-                  <span className="text-[8px] font-bold mt-1 uppercase">Upload</span>
+                  <span className="text-[8px] font-bold mt-1 uppercase">Upload Photo</span>
                 </div>
               </div>
 
@@ -66,17 +65,17 @@ export default function OnboardingPage() {
                 <input 
                   type="text" 
                   placeholder="e.g. Nathalie VPSI"
-                  className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-purion-primary outline-none transition-all"
+                  className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-purion-primary outline-none transition-all text-slate-900"
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                 />
               </div>
 
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Phone Number</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase ml-1 text-slate-900">Phone Number</label>
                 <input 
                   type="tel" 
                   placeholder="+233..."
-                  className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-purion-primary outline-none transition-all"
+                  className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-purion-primary outline-none transition-all text-slate-900"
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                 />
               </div>
@@ -90,13 +89,13 @@ export default function OnboardingPage() {
             </div>
           </motion.div>
         ) : (
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-             <h1 className="text-3xl font-black text-purion-dark mb-2">Business Details</h1>
-             <p className="text-slate-500 mb-8">This information will be used for your Digital Safety Badge.</p>
+          <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+             <h1 className="text-3xl font-black text-purion-dark mb-2 tracking-tight">Business Details</h1>
+             <p className="text-slate-500 mb-8 text-sm">This information will be used for your Digital Safety Badge.</p>
 
-             <div className="space-y-6">
+             <div className="space-y-6 text-slate-900">
                 <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase ml-1 text-slate-900">Entity Name</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Entity Name</label>
                   <div className="relative">
                     <Store className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                     <input 
@@ -109,9 +108,6 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase ml-1 text-slate-900">Entity Type</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Entity Type</label>
                   <select 
-                    className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-purion-primary outline-none text-slate-900"
-                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                  >
-                    <option>Street Ve
+                    className="w-full p-4 rounded-xl bg-slate-50 bord
