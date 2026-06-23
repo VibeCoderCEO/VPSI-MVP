@@ -5,10 +5,9 @@ import { motion } from 'framer-motion';
 import { 
   Heart, MessageCircle, Share2, ShieldCheck, 
   MoreHorizontal, PlusSquare, Search, Bell,
-  CheckCircle, MapPin, Award
+  CheckCircle, MapPin, Award, User
 } from 'lucide-react';
 
-// Pro Mock Data for the MVP
 const INITIAL_POSTS = [
   {
     id: 1,
@@ -37,45 +36,25 @@ const INITIAL_POSTS = [
 ];
 
 export default function FeedPage() {
-  const [posts, setPosts] = useState(INITIAL_POSTS);
+  const [posts] = useState(INITIAL_POSTS);
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
-      {/* 1. STICKY PRO NAV */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="bg-purion-dark p-1.5 rounded-lg">
             <ShieldCheck className="text-purion-light" size={20} />
           </div>
-          <span className="font-black text-xl tracking-tighter text-purion-dark">PURION</span>
+          <span className="font-black text-xl tracking-tighter text-purion-dark uppercase">PURION</span>
         </div>
         <div className="flex items-center gap-5 text-slate-600">
           <Search size={22} className="cursor-pointer hover:text-purion-primary" />
-          <div className="relative">
-             <Bell size={22} className="cursor-pointer hover:text-purion-primary" />
-             <span className="absolute -top-1 -right-1 bg-purion-danger w-2 h-2 rounded-full border-2 border-white"></span>
-          </div>
+          <Bell size={22} className="cursor-pointer hover:text-purion-primary" />
           <PlusSquare size={22} className="text-purion-primary cursor-pointer" />
         </div>
       </nav>
 
       <div className="max-w-xl mx-auto pt-6 space-y-6">
-        
-        {/* 2. PRO-VENDORS "STORIES" (Academy Graduates) */}
-        <div className="px-4 overflow-x-auto no-scrollbar flex gap-4">
-          {[1,2,3,4,5].map((i) => (
-            <div key={i} className="flex flex-col items-center gap-1 min-w-[70px]">
-              <div className="w-16 h-16 rounded-full border-2 border-purion-primary p-0.5">
-                <div className="w-full h-full bg-slate-200 rounded-full border-2 border-white overflow-hidden">
-                  <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" />
-                </div>
-              </div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase">Vendor {i}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* 3. THE FEED ENGINE */}
         <div className="space-y-8">
           {posts.map((post) => (
             <motion.article 
@@ -84,42 +63,34 @@ export default function FeedPage() {
               animate={{ opacity: 1, y: 0 }}
               className="bg-white border border-slate-100 shadow-sm overflow-hidden"
             >
-              {/* Post Header */}
               <div className="p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <div className="w-10 h-10 bg-slate-200 rounded-full overflow-hidden border border-slate-100">
-                       <img src={`https://ui-avatars.com/api/?name=${post.vendorName}&background=random`} alt="" />
-                    </div>
-                    {/* Role Indicator */}
-                    <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center
-                      ${post.status === 'green' ? 'bg-purion-light' : 'bg-purion-accent'}`}>
-                      <CheckCircle size={8} className="text-white" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1">
-                      <h4 className="font-bold text-sm text-slate-900">{post.vendorName}</h4>
-                      {post.verified && <Award size={14} className="text-blue-500 fill-blue-500" />}
-                    </div>
-                    <div className="flex items-center gap-1 text-slate-400">
-                      <MapPin size={10} />
-                      <span className="text-[10px] font-medium uppercase tracking-tight">{post.location}</span>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-3 text-slate-900">
+                   <div className="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center font-bold">
+                     {post.vendorName[0]}
+                   </div>
+                   <div>
+                      <h4 className="font-bold text-sm">{post.vendorName}</h4>
+                      <p className="text-[10px] text-slate-400 uppercase">{post.location}</p>
+                   </div>
                 </div>
-                <MoreHorizontal size={18} className="text-slate-400 cursor-pointer" />
+                <MoreHorizontal size={18} className="text-slate-400" />
               </div>
-
-              {/* Visual Content */}
-              <div className="relative aspect-square bg-slate-100">
-                <img 
-                  src={post.imageUrl} 
-                  alt="Post content" 
-                  className="w-full h-full object-cover"
-                />
-                {/* Safety Badge Overlay */}
-                <div className={`absolute top-4 right-4 px-3 py-1 rounded-full backdrop-blur-md text-[10px] font-black uppercase tracking-widest flex items-center gap-2 border
-                  ${post.status === 'green' ? 'bg-green-500/20 text-green-100 border-green-400/30' : 'bg-yellow-500/20 text-yellow-100 border-yellow-400/30'}`}>
-                  <div className={`w-2 h-2 rounded-full animate-pulse ${post.status === 'green' ? 'bg-purion-light' : 'bg-purion-accent'}`} />
-                  {post.status} Safety Rating
+              <img src={post.imageUrl} className="w-full aspect-square object-cover" alt="Post" />
+              <div className="p-4">
+                <div className="flex gap-4 mb-4">
+                  <Heart size={24} className="text-slate-400" />
+                  <MessageCircle size={24} className="text-slate-400" />
+                  <Share2 size={24} className="text-slate-400" />
+                </div>
+                <p className="text-sm text-slate-700">
+                  <span className="font-bold mr-2 text-slate-900">{post.vendorName}</span>
+                  {post.caption}
+                </p>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
