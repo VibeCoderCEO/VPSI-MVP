@@ -1,0 +1,174 @@
+npx create-next-app@latest . --typescript --tailwind --eslint
+
+npm install lucide-react framer-motion clsx tailwind-merge
+
+// tailwind.config.ts
+const config = {
+  theme: {
+    extend: {
+      colors: {
+        purion: {
+          dark: '#062d1a',    // Deep Forest Green
+          primary: '#1a8344', // Main Brand Green
+          light: '#22c55e',   // Safety Green
+          accent: '#facc15',  // Warning Yellow
+          danger: '#ef4444',  // Alert Red
+        },
+      },
+    },
+  },
+}
+export default config;
+// tailwind.config.ts
+const config = {
+  theme: {
+    extend: {
+      colors: {
+        purion: {
+          dark: '#062d1a',    // Deep Forest Green
+          primary: '#1a8344', // Main Brand Green
+          light: '#22c55e',   // Safety Green
+          accent: '#facc15',  // Warning Yellow
+          danger: '#ef4444',  // Alert Red
+        },
+      },
+    },
+  },
+}
+
+export default config;
+"use client";
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, User, Briefcase, ChevronRight, Lock } from 'lucide-react';
+
+export default function AuthPage() {
+  const [step, setStep] = useState<'role' | 'login' | 'verify'>( 'role');
+  const [role, setRole] = useState<'consumer' | 'professional' | null>(null);
+  const [email, setEmail] = useState('');
+  const [accessKey, setAccessKey] = useState('');
+
+  // The Logic: Role Selection UI
+  const RoleCard = ({ type, title, desc, icon: Icon }: any) => (
+    <motion.div 
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={() => { setRole(type); setStep('login'); }}
+      className="cursor-pointer bg-white border-2 border-slate-100 p-6 rounded-2xl shadow-sm hover:border-purion-primary transition-all group"
+    >
+      <div className="flex items-center justify-between">
+        <div className={`p-4 rounded-xl ${type === 'consumer' ? 'bg-green-50' : 'bg-blue-50'}`}>
+          <Icon className={type === 'consumer' ? 'text-purion-primary' : 'text-blue-600'} size={32} />
+        </div>
+        <ChevronRight className="text-slate-300 group-hover:text-purion-primary transition-colors" />
+      </div>
+      <h3 className="mt-6 text-xl font-bold text-purion-dark">{title}</h3>
+      <p className="text-slate-500 mt-2 text-sm leading-relaxed">{desc}</p>
+    </motion.div>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 font-sans">
+      {/* Branding */}
+      <div className="mb-12 text-center">
+        <div className="w-20 h-20 bg-purion-dark rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+           <ShieldCheck className="text-purion-light" size={45} />
+        </div>
+        <h1 className="text-4xl font-black tracking-tight text-purion-dark">PURION</h1>
+        <p className="text-purion-primary font-medium tracking-[0.2em] text-xs mt-1">FOOD SAFETY MADE VISIBLE</p>
+      </div>
+
+      <div className="w-full max-w-md">
+        <AnimatePresence mode="wait">
+          
+          {/* STEP 1: ROLE SELECTION */}
+          {step === 'role' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+              className="space-y-4"
+            >
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-slate-800">Welcome to VPSI Purion</h2>
+                <p className="text-slate-500">Choose your account type to continue</p>
+              </div>
+              <RoleCard 
+                type="consumer"
+                title="Consumer"
+                desc="Find safe places to eat and track food safety ratings in real-time."
+                icon={User}
+              />
+              <RoleCard 
+                type="professional"
+                title="Professional"
+                desc="Vendors, Inspectors & Producers. Manage certificates and safety logs."
+                icon={Briefcase}
+              />
+            </motion.div>
+          )}
+
+          {/* STEP 2: OAUTH & LOGIN */}
+          {step === 'login' && (
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
+              className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100"
+            >
+              <button onClick={() => setStep('role')} className="text-sm text-purion-primary font-bold mb-6 flex items-center">
+                ← Back
+              </button>
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">
+                {role === 'consumer' ? 'Sign In' : 'Professional Access'}
+              </h2>
+              <p className="text-slate-500 mb-8 text-sm">Secure access via Google Identity Services</p>
+
+              <button className="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 py-4 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-all mb-4">
+                <img src="https://www.svgrepo.com/show/355037/google.svg" className="w-5 h-5" alt="Google" />
+                Continue with Google
+              </button>
+
+              <div className="relative my-8">
+                <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-100"></span></div>
+                <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-slate-400">Or email OTP</span></div>
+              </div>
+
+              <input 
+                type="email" placeholder="Enter your email address"
+                className="w-full p-4 rounded-xl border-2 border-slate-100 focus:border-purion-primary outline-none transition-all mb-4"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              {/* SECURITY GATE FOR PROFESSIONALS */}
+              {role === 'professional' && (
+                <div className="mt-2 mb-6">
+                  <label className="text-xs font-bold text-slate-400 uppercase mb-2 block">Admin Access Key</label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    <input 
+                      type="password" placeholder="VPSI Master Key"
+                      className="w-full p-4 pl-12 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-purion-primary outline-none transition-all"
+                      onChange={(e) => setAccessKey(e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <button 
+                onClick={() => setStep('verify')}
+                disabled={role === 'professional' && accessKey !== 'VPSI2026Pro'}
+                className="w-full bg-purion-dark text-white py-4 rounded-xl font-bold shadow-lg hover:bg-opacity-90 disabled:bg-slate-300 disabled:cursor-not-allowed transition-all"
+              >
+                Request Access Code
+              </button>
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+      </div>
+      
+      {/* Footer Branding */}
+      <p className="mt-12 text-slate-400 text-xs tracking-widest uppercase">
+        Powered by VPSI Global Infrastructure
+      </p>
+    </div>
+  );
+}
