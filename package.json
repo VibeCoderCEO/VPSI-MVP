@@ -23,7 +23,8 @@
     "@supabase/supabase-js": "^2.43.2",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "date-fns": "^3.6.0",
-    "canvas-confetti": "^1.9.3"
+    "canvas-confetti": "^1.9.3",
+    "react-paystack": "^5.0.0"
   },
   "devDependencies": {
     "typescript": "^5.4.5",
@@ -39,13 +40,5 @@
   },
   "engines": {
     "node": ">=18.17.0"
-  },
-  "keywords": [
-    "Food Safety",
-    "HealthTech",
-    "VPSI",
-    "Purion",
-    "Public Health",
-    "Real-time Safety"
-  ]
+  }
 }
